@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
+
 
 struct LoginView: View {
     
@@ -13,11 +15,12 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     
+    
     var body: some View {
         NavigationView{
             ScrollView{
                
-                    VStack{
+                VStack(spacing: 20){
                         segmentedPicker
                         
                         if !isLoginMode {
@@ -34,6 +37,7 @@ struct LoginView: View {
             .navigationTitle(isLoginMode ? "Log in": "Create Account")
             .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         
     }
     
@@ -71,7 +75,7 @@ struct LoginView: View {
     
     private var createAccountButton: some View {
         Button {
-            
+            handleAction()
         }label: {
             HStack {
                 Spacer()
@@ -84,6 +88,40 @@ struct LoginView: View {
             }
             .background(Color.blue).cornerRadius(20)
             .padding()
+        }
+    }
+    
+    private func handleAction() {
+        if isLoginMode {
+            //login
+            login()
+            
+        }
+        else{
+            //create new account
+            createNewAccount()
+        }
+    }
+    
+    private func createNewAccount() {
+        FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { result, error in
+            
+            if let error = error {
+                print("Couldnt create new user \n\n" + error.localizedDescription)
+            }
+            
+        }
+    }
+    
+    private func login() {
+        FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { result, error in
+            if let error = error {
+                print("Error logging in" + error.localizedDescription)
+            }
+            else{
+                print("Successfully logged in as user: \(result?.user.uid ?? "")")
+            }
+            
         }
     }
     
