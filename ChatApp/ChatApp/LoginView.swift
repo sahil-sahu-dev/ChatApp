@@ -14,7 +14,9 @@ struct LoginView: View {
     @State private var isLoginMode = false
     @State private var email = ""
     @State private var password = ""
-    
+    @State private var loginStatusMessage = ""
+    @State private var shouldShowImagePicker = false
+    @State private var image: UIImage?
     
     var body: some View {
         NavigationView{
@@ -30,6 +32,7 @@ struct LoginView: View {
                         emailTextField
                         passwordTextField
                         createAccountButton
+                        Text(loginStatusMessage)
                         
                     }
                 .padding()
@@ -38,6 +41,9 @@ struct LoginView: View {
             .background(Color(.init(white: 0, alpha: 0.05)).ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+            ImagePicker(image: $image)
+        }
         
     }
     
@@ -66,10 +72,27 @@ struct LoginView: View {
     
     private var personButtonView: some View {
         Button {
+            shouldShowImagePicker.toggle()
             
         } label: {
-            Image(systemName: "person.fill")
-                .font(.largeTitle)
+            VStack {
+                if let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 128, height: 128)
+                        .cornerRadius(64)
+                }
+                else{
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 64))
+                        .padding()
+                        .foregroundColor(Color(.label))
+                        
+                }
+            }
+            .overlay(RoundedRectangle(cornerRadius: 64).stroke(Color.black, lineWidth: 3))
+            
         }.padding()
     }
     
@@ -100,6 +123,7 @@ struct LoginView: View {
         else{
             //create new account
             createNewAccount()
+            storeImage()
         }
     }
     
@@ -110,6 +134,9 @@ struct LoginView: View {
                 print("Couldnt create new user \n\n" + error.localizedDescription)
             }
             
+            print("Successfully created user: \(result?.user.uid ?? "")")
+            self.loginStatusMessage = "Successfully created user: \(result?.user.uid ?? "")"
+            
         }
     }
     
@@ -119,7 +146,33 @@ struct LoginView: View {
                 print("Error logging in" + error.localizedDescription)
             }
             else{
+                
                 print("Successfully logged in as user: \(result?.user.uid ?? "")")
+                loginStatusMessage = "Successfully logged in as user: \(result?.user.uid ?? "")"
+
+            }
+            
+        }
+    }
+    
+    
+    private func storeImage() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {return}
+        let ref = FirebaseManager.shared.storage.reference(withPath: uid)
+        guard let imageData = image?.jpegData(compressionQuality: 0.5) else{return}
+        
+        ref.putData(imageData, metadata: nil) { metadata, err in
+            if let error = err {
+                loginStatusMessage = "Failed to push image to storage \(error)"
+                return
+            }
+            
+            ref.downloadURL { url, err in
+                if let error = err {
+                    loginStatusMessage = "Failed to download image url \(error)"
+                }
+                
+                loginStatusMessage = "Successfully store image to firebase with url \(String(describing: url?.absoluteString))"
             }
             
         }
