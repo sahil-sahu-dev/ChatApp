@@ -10,6 +10,7 @@ import SwiftUI
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions = false
+    @ObservedObject var charUser = MainMessagesViewDocument()
     
     private var customNavBar: some View {
         HStack(spacing: 16) {

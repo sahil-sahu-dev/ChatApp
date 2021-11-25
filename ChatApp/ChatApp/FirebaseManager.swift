@@ -8,15 +8,19 @@
 import Foundation
 import Firebase
 
-class FirebaseManager {
+class FirebaseManager: NSObject {
     
     let auth: Auth
     let storage: Storage
     static let shared = FirebaseManager()
+    let firestore: Firestore
     
-    init() {
+   override init() {
         FirebaseApp.configure()
         self.auth = Auth.auth()
         self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
+        
+        super.init()
     }
 }
