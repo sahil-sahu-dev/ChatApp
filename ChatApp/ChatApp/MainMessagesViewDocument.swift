@@ -11,9 +11,11 @@ class MainMessagesViewDocument: ObservableObject {
     
     @Published var chatUser: ChatUser?
     @Published var errorMessage: String = ""
+    @Published var isUserCurrentlyLoggedOut = false
     
     
     init() {
+        self.isUserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil ? true : false
         fetchCurrentUser()
     }
     
@@ -49,5 +51,11 @@ class MainMessagesViewDocument: ObservableObject {
            // self.errorMessage = self.chatUser!.imageProfile
         }
         
+    }
+    
+    func handleSignOut() {
+        self.isUserCurrentlyLoggedOut.toggle()
+        try? FirebaseManager.shared.auth.signOut()
+       
     }
 }

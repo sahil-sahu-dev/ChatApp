@@ -18,6 +18,8 @@ struct LoginView: View {
     @State private var shouldShowImagePicker = false
     @State private var image: UIImage?
     
+    let didCompleteUserLogin:() -> ()
+    
     var body: some View {
         NavigationView{
             ScrollView{
@@ -152,7 +154,7 @@ struct LoginView: View {
                 
                 print("Successfully logged in as user: \(result?.user.uid ?? "")")
                 loginStatusMessage = "Successfully logged in as user: \(result?.user.uid ?? "")"
-
+                self.didCompleteUserLogin()
             }
             
         }
@@ -198,6 +200,7 @@ struct LoginView: View {
                 }
                 
                 print("Success")
+                self.didCompleteUserLogin()
             }
     }
     
@@ -205,6 +208,8 @@ struct LoginView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(didCompleteUserLogin: {
+            
+        })
     }
 }

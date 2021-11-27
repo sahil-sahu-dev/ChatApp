@@ -59,10 +59,18 @@ struct MainMessagesView: View {
         .actionSheet(isPresented: $shouldShowLogOutOptions) {
             .init(title: Text("Settings"), message: Text("What do you want to do?"), buttons: [
                 .destructive(Text("Sign Out"), action: {
+                    
+                    vm.handleSignOut()
+                    
                     print("handle sign out")
                 }),
                 .cancel()
             ])
+        }
+        .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
+            LoginView(didCompleteUserLogin: {
+                self.vm.isUserCurrentlyLoggedOut = false
+            })
         }
     }
     
