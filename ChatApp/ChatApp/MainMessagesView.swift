@@ -6,20 +6,33 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+
 
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions = false
-    @ObservedObject var charUser = MainMessagesViewDocument()
+    @ObservedObject var vm = MainMessagesViewDocument()
     
     private var customNavBar: some View {
         HStack(spacing: 16) {
             
-            Image(systemName: "person.fill")
-                .font(.system(size: 34, weight: .heavy))
+            
+            WebImage(url: URL(string: vm.chatUser?.imageProfile ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width: 50, height: 50)
+                .clipped()
+                .cornerRadius(50)
+                .overlay(RoundedRectangle(cornerRadius: 44)
+                            .stroke(Color(.label), lineWidth: 1)
+                )
+                .shadow(radius: 5)
+            
+            
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("USERNAME")
+                Text("\(vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "") ?? "")")
                     .font(.system(size: 24, weight: .bold))
                 
                 HStack {
@@ -119,6 +132,9 @@ struct MainMessagesView: View {
             .shadow(radius: 15)
         }
     }
+    
+    
+    
 }
 
 struct MainMessagesView_Previews: PreviewProvider {

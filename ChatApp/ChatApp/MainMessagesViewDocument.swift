@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 class MainMessagesViewDocument: ObservableObject {
     
     @Published var chatUser: ChatUser?
@@ -24,24 +23,30 @@ class MainMessagesViewDocument: ObservableObject {
             self.errorMessage = "Could not find user uid"
             return
         }
+        self.errorMessage = "\(user_uid)"
         
         FirebaseManager.shared.firestore.collection("users").document(user_uid).getDocument { snapshot, error in
             
             if let error = error {
-                self.errorMessage = "Could not fetch user data \(error)"
-                print("Couldnt fetch user ")
+               self.errorMessage = "Could not fetch user data \(error)"
+                return
             }
+            
             
             guard let data = snapshot?.data() else {
                 self.errorMessage = "No data found"
                 return
             }
             
+            self.errorMessage = "Data: \(data.description)"
+            
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let profileImageUrl = data["profileImageUrl"]  as? String ?? ""
             
             self.chatUser = ChatUser(uid: uid, imageProfile: profileImageUrl, email: email)
+            
+           // self.errorMessage = self.chatUser!.imageProfile
         }
         
     }
