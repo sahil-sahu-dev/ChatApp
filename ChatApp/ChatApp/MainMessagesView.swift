@@ -12,6 +12,7 @@ import SDWebImageSwiftUI
 struct MainMessagesView: View {
     
     @State var shouldShowLogOutOptions = false
+    @State var shouldShowNewMessageView = false
     @ObservedObject var vm = MainMessagesViewDocument()
     
     private var customNavBar: some View {
@@ -68,9 +69,10 @@ struct MainMessagesView: View {
             ])
         }
         .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
-            LoginView(didCompleteUserLogin: {
+            LoginView{
                 self.vm.isUserCurrentlyLoggedOut = false
-            })
+                vm.fetchCurrentUser()
+            }
         }
     }
     
@@ -78,6 +80,7 @@ struct MainMessagesView: View {
     var body: some View {
         NavigationView{
             VStack {
+                Text(vm.errorMessage)
                 customNavBar
                 messagesView
             }
@@ -124,7 +127,7 @@ struct MainMessagesView: View {
     
     private var newMessageButton: some View {
         Button {
-            
+            self.shouldShowNewMessageView.toggle()
         } label: {
             HStack {
                 Spacer()
@@ -138,6 +141,10 @@ struct MainMessagesView: View {
             .cornerRadius(32)
             .padding(.horizontal)
             .shadow(radius: 15)
+        }
+        
+        .fullScreenCover(isPresented: $shouldShowNewMessageView) {
+            CreateNewMessageView()
         }
     }
     

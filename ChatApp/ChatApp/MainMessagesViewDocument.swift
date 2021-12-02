@@ -11,7 +11,7 @@ class MainMessagesViewDocument: ObservableObject {
     
     @Published var chatUser: ChatUser?
     @Published var errorMessage: String = ""
-    @Published var isUserCurrentlyLoggedOut = false
+    @Published var isUserCurrentlyLoggedOut:Bool
     
     
     init() {
@@ -19,7 +19,7 @@ class MainMessagesViewDocument: ObservableObject {
         fetchCurrentUser()
     }
     
-    private func fetchCurrentUser() {
+    func fetchCurrentUser() {
         
         guard let user_uid = FirebaseManager.shared.auth.currentUser?.uid else {
             self.errorMessage = "Could not find user uid"
@@ -54,8 +54,18 @@ class MainMessagesViewDocument: ObservableObject {
     }
     
     func handleSignOut() {
+        do{
+            try FirebaseManager.shared.auth.signOut()
+
+        }
+        catch{
+            self.errorMessage = error.localizedDescription
+            print(error.localizedDescription)
+        }
+        
+        self.chatUser = nil
         self.isUserCurrentlyLoggedOut.toggle()
-        try? FirebaseManager.shared.auth.signOut()
-       
     }
+    
+    
 }
