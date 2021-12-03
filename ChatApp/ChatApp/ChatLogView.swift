@@ -12,6 +12,12 @@ struct ChatLogView: View {
     let chatUser: ChatUser?
     
     @State var chatText = ""
+    @ObservedObject var vm: ChatLogViewModel
+    
+    init(chatUser: ChatUser?) {
+        self.chatUser = chatUser
+        vm = .init(chatUser: chatUser)
+    }
     
     var body: some View {
         ZStack {
@@ -57,13 +63,13 @@ struct ChatLogView: View {
                 .foregroundColor(Color(.darkGray))
             ZStack {
                 DescriptionPlaceholder()
-                TextEditor(text: $chatText)
-                    .opacity(chatText.isEmpty ? 0.5 : 1)
+                TextEditor(text: $vm.chatText)
+                    .opacity(vm.chatText.isEmpty ? 0.5 : 1)
             }
             .frame(height: 40)
             
             Button {
-                
+                vm.handleSend()
             } label: {
                 Text("Send")
                     .foregroundColor(.white)

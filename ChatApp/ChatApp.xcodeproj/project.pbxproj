@@ -11,6 +11,7 @@
 		B2027ABB274F030F00CDBA26 /* ChatUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2027ABA274F030F00CDBA26 /* ChatUser.swift */; };
 		B23D415E2750DB9C00E3756B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B23D415D2750DB9C00E3756B /* SDWebImageSwiftUI */; };
 		B24511172759146B007F6861 /* ChatLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24511162759146B007F6861 /* ChatLogView.swift */; };
+		B246629C2759ED9800B8A1FA /* ChatLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */; };
 		B25FD3222754D4A600E5F3DB /* CreateNewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FD3212754D4A600E5F3DB /* CreateNewMessageView.swift */; };
 		B25FD3242754D5E300E5F3DB /* CreateNewMessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B25FD3232754D5E300E5F3DB /* CreateNewMessageViewModel.swift */; };
 		B2A0180B274129A500C2E4BE /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A0180A274129A500C2E4BE /* ImagePicker.swift */; };
@@ -30,6 +31,7 @@
 		B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesViewDocument.swift; sourceTree = "<group>"; };
 		B2027ABA274F030F00CDBA26 /* ChatUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUser.swift; sourceTree = "<group>"; };
 		B24511162759146B007F6861 /* ChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogView.swift; sourceTree = "<group>"; };
+		B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogViewModel.swift; sourceTree = "<group>"; };
 		B25FD3212754D4A600E5F3DB /* CreateNewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMessageView.swift; sourceTree = "<group>"; };
 		B25FD3232754D5E300E5F3DB /* CreateNewMessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMessageViewModel.swift; sourceTree = "<group>"; };
 		B2A0180A274129A500C2E4BE /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				B2A86299273FD4870040DFE9 /* LoginView.swift */,
 				B2D4964F2743AC6700915420 /* MainMessagesView.swift */,
 				B24511162759146B007F6861 /* ChatLogView.swift */,
+				B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */,
 				B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */,
 				B25FD3212754D4A600E5F3DB /* CreateNewMessageView.swift */,
 				B25FD3232754D5E300E5F3DB /* CreateNewMessageViewModel.swift */,
@@ -186,6 +189,7 @@
 				B2027ABB274F030F00CDBA26 /* ChatUser.swift in Sources */,
 				B24511172759146B007F6861 /* ChatLogView.swift in Sources */,
 				B2027AB9274F02B400CDBA26 /* MainMessagesViewDocument.swift in Sources */,
+				B246629C2759ED9800B8A1FA /* ChatLogViewModel.swift in Sources */,
 				B2D75EC3273FEC71002933C3 /* FirebaseManager.swift in Sources */,
 				B25FD3222754D4A600E5F3DB /* CreateNewMessageView.swift in Sources */,
 				B2A0180B274129A500C2E4BE /* ImagePicker.swift in Sources */,

@@ -90,7 +90,7 @@ struct MainMessagesView: View {
                 customNavBar
                 messagesView
                 NavigationLink("", isActive:$shouldShowMessageLogView ) {
-                    ChatLogView(chatUser: chatUser)
+                    ChatLogView(chatUser: chatUser ?? nil)
                 }
             }
             .overlay(
