@@ -33,27 +33,51 @@ struct ChatLogView: View {
     }
     
     private var messagesView: some View {
-        ScrollView {
-            ForEach(0..<20) { num in
-                HStack {
-                    Spacer()
-                    HStack {
-                        Text("FAKE MESSAGE FOR NOW")
-                            .foregroundColor(.white)
+        VStack {
+            if #available(iOS 15.0, *) {
+                ScrollView {
+                    ForEach(vm.chatMessages) { message in
+                        VStack {
+                            if message.fromId == FirebaseManager.shared.auth.currentUser?.uid {
+                                HStack {
+                                    Spacer()
+                                    HStack {
+                                        Text(message.text)
+                                            .foregroundColor(.white)
+                                    }
+                                    .padding()
+                                    .background(Color.blue)
+                                    .cornerRadius(8)
+                                }
+                            } else {
+                                HStack {
+                                    HStack {
+                                        Text(message.text)
+                                            .foregroundColor(.black)
+                                    }
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(8)
+                                    Spacer()
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 8)
+                        
                     }
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-                }
-                .padding(.horizontal)
-                .padding(.top, 8)
-            }
-            
-            HStack{ Spacer() }
-            .frame(height: 50)
-        }
-        .background(Color(.init(white: 0.95, alpha: 1)))
                     
+                    HStack{ Spacer() }
+                }
+                .background(Color(.init(white: 0.95, alpha: 1)))
+                .safeAreaInset(edge: .bottom) {
+                    chatBottomBar
+                        .background(Color(.systemBackground).ignoresSafeArea())
+                }
+            } else {
+                // Fallback on earlier versions
+            }
+        }
     }
     
     private var chatBottomBar: some View {
@@ -99,8 +123,9 @@ private struct DescriptionPlaceholder: View {
 
 struct ChatLogView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ChatLogView(chatUser: ChatUser(uid: "FXQrsb3RtoOGSdPBiKt5Tfxzit43", imageProfile: "https://firebasestorage.googleapis.com:443/v0/b/chatapp-27d7e.appspot.com/o/FXQrsb3RtoOGSdPBiKt5Tfxzit43?alt=media&token=5f21f966-36dd-4d81-96cf-1d69263c5007", email: "leaf@gmail.com"))
-        }
+//        NavigationView {
+//            ChatLogView(chatUser: ChatUser(uid: "FXQrsb3RtoOGSdPBiKt5Tfxzit43", imageProfile: "https://firebasestorage.googleapis.com:443/v0/b/chatapp-27d7e.appspot.com/o/FXQrsb3RtoOGSdPBiKt5Tfxzit43?alt=media&token=5f21f966-36dd-4d81-96cf-1d69263c5007", email: "leaf@gmail.com"))
+//        }
+        MainMessagesView()
     }
 }
