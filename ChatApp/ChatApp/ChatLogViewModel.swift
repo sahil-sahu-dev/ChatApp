@@ -35,6 +35,9 @@ class ChatLogViewModel: ObservableObject {
     @Published var chatText = ""
     @Published var errorMessage = ""
     @Published var chatMessages = [ChatMessage]()
+    
+    @Published var count = 0
+    
     let chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
@@ -65,6 +68,10 @@ class ChatLogViewModel: ObservableObject {
                 })
                 
             }
+        
+        DispatchQueue.main.async {
+            self.count += 1
+        }
     }
     
     func handleSend() {
