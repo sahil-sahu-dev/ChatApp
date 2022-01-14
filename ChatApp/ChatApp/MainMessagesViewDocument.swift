@@ -6,17 +6,55 @@
 //
 
 import Foundation
+import Firebase
+import FirebaseFirestore
 
 class MainMessagesViewDocument: ObservableObject {
     
     @Published var chatUser: ChatUser?
     @Published var errorMessage: String = ""
     @Published var isUserCurrentlyLoggedOut:Bool
-    
+    @Published var recentMessages = [RecentMessage]()
     
     init() {
         self.isUserCurrentlyLoggedOut = FirebaseManager.shared.auth.currentUser?.uid == nil ? true : false
         fetchCurrentUser()
+        fetchRecentMessages()
+    }
+    
+    private var firestoreRegisteration: ListenerRegistration?
+    
+    func fetchRecentMessages() {
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else{return}
+        
+       
+        firestoreRegisteration?.remove()
+        recentMessages.removeAll()
+        
+        firestoreRegisteration = FirebaseManager.shared.firestore
+            .collection("recent_messages")
+            .document(uid)
+            .collection("messages")
+            .order(by: "timestamp")
+            .addSnapshotListener { querySnapshot, error in
+            
+            if let error = error {
+                print("failed to listen for recent messages" + error.localizedDescription)
+                return
+            }
+            querySnapshot?.documentChanges.forEach({ change in
+                
+                    let docId = change.document.documentID
+                    
+                if let index = self.recentMessages.firstIndex(where: {rm in
+                    rm.documentId == docId
+                }){
+                    self.recentMessages.remove(at: index)
+                }
+                self.recentMessages.insert(.init(documentId: docId, data: change.document.data()), at: 0)
+            })
+        }
+        
     }
     
     func fetchCurrentUser() {
@@ -48,7 +86,7 @@ class MainMessagesViewDocument: ObservableObject {
             
             self.chatUser = ChatUser(uid: uid, imageProfile: profileImageUrl, email: email)
             
-           // self.errorMessage = self.chatUser!.imageProfile
+            FirebaseManager.shared.currentUser = self.chatUser
         }
         
     }

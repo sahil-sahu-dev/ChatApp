@@ -9,16 +9,16 @@ import SwiftUI
 
 struct ChatLogView: View {
     
-    let chatUser: ChatUser?
+    //let chatUser: ChatUser?
     
     @State var chatText = ""
-    @ObservedObject var vm: ChatLogViewModel
+    @ObservedObject var vm: ChatLogViewModel = ChatLogViewModel(chatUser: nil)
     
     
-    init(chatUser: ChatUser?) {
-        self.chatUser = chatUser
-        vm = .init(chatUser: chatUser)
-    }
+    //    init(chatUser: ChatUser?) {
+    //        self.chatUser = chatUser
+    //        vm = .init(chatUser: chatUser)
+    //    }
     
     var body: some View {
         ZStack {
@@ -29,8 +29,11 @@ struct ChatLogView: View {
                     .background(Color.white.ignoresSafeArea())
             }
         }
-        .navigationTitle(chatUser?.email ?? "")
+        .navigationTitle(vm.chatUser?.email ?? "")
         .navigationBarTitleDisplayMode(.inline)
+        .onDisappear {
+            vm.firestoreListener?.remove()
+        }
     }
     
     private var messagesView: some View {
@@ -47,8 +50,10 @@ struct ChatLogView: View {
                         .id("empty")
                         .onReceive(vm.$count) { _ in
                             
+                            withAnimation(.easeInOut(duration: 0.3)){
                                 scrollViewProxyx.scrollTo("empty", anchor: .bottom)
                             }
+                        }
                     }
                     
                     
@@ -103,6 +108,8 @@ private struct DescriptionPlaceholder: View {
                 .padding(.top, -4)
             Spacer()
         }
+        
+        
     }
 }
 

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B2027AB9274F02B400CDBA26 /* MainMessagesViewDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */; };
 		B2027ABB274F030F00CDBA26 /* ChatUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2027ABA274F030F00CDBA26 /* ChatUser.swift */; };
+		B236177627910B0100C836D3 /* RecentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B236177527910B0100C836D3 /* RecentMessage.swift */; };
 		B23D415E2750DB9C00E3756B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B23D415D2750DB9C00E3756B /* SDWebImageSwiftUI */; };
 		B24511172759146B007F6861 /* ChatLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24511162759146B007F6861 /* ChatLogView.swift */; };
 		B246629C2759ED9800B8A1FA /* ChatLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesViewDocument.swift; sourceTree = "<group>"; };
 		B2027ABA274F030F00CDBA26 /* ChatUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUser.swift; sourceTree = "<group>"; };
+		B236177527910B0100C836D3 /* RecentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMessage.swift; sourceTree = "<group>"; };
 		B24511162759146B007F6861 /* ChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogView.swift; sourceTree = "<group>"; };
 		B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogViewModel.swift; sourceTree = "<group>"; };
 		B24C38C327904A28006DA0E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				B2A86297273FD4870040DFE9 /* ChatAppApp.swift */,
 				B2A86299273FD4870040DFE9 /* LoginView.swift */,
 				B2D4964F2743AC6700915420 /* MainMessagesView.swift */,
+				B236177527910B0100C836D3 /* RecentMessage.swift */,
 				B24511162759146B007F6861 /* ChatLogView.swift */,
 				B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */,
 				B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */,
@@ -194,6 +197,7 @@
 				B25FD3222754D4A600E5F3DB /* CreateNewMessageView.swift in Sources */,
 				B2A0180B274129A500C2E4BE /* ImagePicker.swift in Sources */,
 				B2A8629A273FD4870040DFE9 /* LoginView.swift in Sources */,
+				B236177627910B0100C836D3 /* RecentMessage.swift in Sources */,
 				B2A86298273FD4870040DFE9 /* ChatAppApp.swift in Sources */,
 				B25FD3242754D5E300E5F3DB /* CreateNewMessageViewModel.swift in Sources */,
 				B2D496502743AC6700915420 /* MainMessagesView.swift in Sources */,

@@ -18,10 +18,10 @@ struct FirebaseConstants {
 struct ChatMessage: Identifiable {
     
     var id: String { documentId }
-
+    
     let documentId: String
     let fromId, toId, text: String
-
+    
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
         self.fromId = data[FirebaseConstants.fromId] as? String ?? ""
@@ -38,7 +38,7 @@ class ChatLogViewModel: ObservableObject {
     
     @Published var count = 0
     
-    let chatUser: ChatUser?
+    var chatUser: ChatUser?
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
@@ -46,12 +46,16 @@ class ChatLogViewModel: ObservableObject {
         
     }
     
+    var firestoreListener: ListenerRegistration?
+    
     func getMessages() {
         
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else{return}
         guard let toId = chatUser?.uid else {return}
         
-        FirebaseManager.shared.firestore.collection("messages")
+        chatMessages.removeAll()
+        
+        firestoreListener = FirebaseManager.shared.firestore.collection("messages")
             .document(fromId)
             .collection(toId)
             .order(by: "timestamp")
@@ -94,6 +98,8 @@ class ChatLogViewModel: ObservableObject {
                 return
             }
             
+            self.persistRecentMessage()
+            
             //no errror
             print("stored the message to firebase")
             self.chatText = ""
@@ -118,6 +124,58 @@ class ChatLogViewModel: ObservableObject {
             
         }
         
+    }
+    
+    private func persistRecentMessage() {
+        
+        guard let uid = FirebaseManager.shared.auth.currentUser?.uid else {return}
+        
+        guard let toId = self.chatUser?.uid else{return}
+        
+        var doc = FirebaseManager.shared.firestore.collection("recent_messages").document(uid).collection("messages").document(toId)
+        
+        let data = [
+            "timestamp" : Timestamp(),
+            "Text": self.chatText,
+            "fromId": uid,
+            "toId" : toId,
+            "profileImageUrl": self.chatUser?.imageProfile as Any,
+            "email": self.chatUser?.email as Any
+            
+        ] as [String : Any]
+        
+        doc.setData(data) { error in
+            if let error  = error {
+                print("failed to store to recent messages" + error.localizedDescription)
+                return
+            }
+        }
+        
+        print("saved to recent messages successfully")
+        
+        
+        doc = FirebaseManager.shared.firestore.collection("recent_messages").document(toId).collection("messages").document(uid)
+        
+        guard let currentUser = FirebaseManager.shared.currentUser else { return }
+        
+        let recipientData =  [
+            "timestamp" : Timestamp(),
+            "Text": self.chatText,
+            "fromId": uid,
+            "toId" : toId,
+            "profileImageUrl": currentUser.imageProfile as Any,
+            "email": currentUser.email as Any
+            
+        ] as [String : Any]
+        
+        doc.setData(recipientData) { error in
+            if let error  = error {
+                print("failed to store to recent messages" + error.localizedDescription)
+                return
+            }
+        }
+        
+        print("saved to recent messages successfully")
     }
     
 }

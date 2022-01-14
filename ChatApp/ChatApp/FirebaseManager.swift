@@ -15,6 +15,8 @@ class FirebaseManager: NSObject {
     static let shared = FirebaseManager()
     let firestore: Firestore
     
+    var currentUser: ChatUser?
+    
    override init() {
         FirebaseApp.configure()
         self.auth = Auth.auth()

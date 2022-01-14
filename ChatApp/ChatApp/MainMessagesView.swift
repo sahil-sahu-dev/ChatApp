@@ -17,6 +17,7 @@ struct MainMessagesView: View {
     
     @ObservedObject var vm = MainMessagesViewDocument()
     
+    private var chatLogViewModel = ChatLogViewModel(chatUser: nil)
     
     private var customNavBar: some View {
         HStack(spacing: 16) {
@@ -25,11 +26,11 @@ struct MainMessagesView: View {
             WebImage(url: URL(string: vm.chatUser?.imageProfile ?? ""))
                 .resizable()
                 .scaledToFill()
-                .frame(width: 50, height: 50)
+                .frame(width: 64, height: 64)
                 .clipped()
-                .cornerRadius(50)
-                .overlay(RoundedRectangle(cornerRadius: 44)
-                            .stroke(Color(.label), lineWidth: 1)
+                .cornerRadius(64)
+                .overlay(RoundedRectangle(cornerRadius: 64)
+                            .stroke(Color.black, lineWidth: 1)
                 )
                 .shadow(radius: 5)
             
@@ -38,15 +39,6 @@ struct MainMessagesView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(vm.chatUser?.email.replacingOccurrences(of: "@gmail.com", with: "") ?? "")")
                     .font(.system(size: 24, weight: .bold))
-                
-                HStack {
-                    Circle()
-                        .foregroundColor(.green)
-                        .frame(width: 14, height: 14)
-                    Text("online")
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(.lightGray))
-                }
                 
             }
             
@@ -74,7 +66,8 @@ struct MainMessagesView: View {
         .fullScreenCover(isPresented: $vm.isUserCurrentlyLoggedOut, onDismiss: nil) {
             LoginView{
                 self.vm.isUserCurrentlyLoggedOut = false
-                vm.fetchCurrentUser()
+                self.vm.fetchCurrentUser()
+                self.vm.fetchRecentMessages()
             }
         }
     }
@@ -86,11 +79,11 @@ struct MainMessagesView: View {
        
         NavigationView{
             VStack {
-                Text(vm.errorMessage)
+                
                 customNavBar
                 messagesView
                 NavigationLink("", isActive:$shouldShowMessageLogView ) {
-                    ChatLogView(chatUser: chatUser ?? nil)
+                    ChatLogView(vm:chatLogViewModel)
                 }
             }
             .overlay(
@@ -102,31 +95,45 @@ struct MainMessagesView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach(0..<10, id: \.self) { num in
+            ForEach(vm.recentMessages) { message in
                 
                 Button {
+                    
+                    let uid = FirebaseManager.shared.auth.currentUser?.uid == message.fromId ? message.toId : message.fromId
+                    
+                    self.chatUser = .init(uid: uid, imageProfile: message.profileImageUrl, email: message.email)
+                    
+                    self.chatLogViewModel.chatUser = self.chatUser
+                    self.chatLogViewModel.getMessages()
+                    self.shouldShowMessageLogView.toggle()
+                    
                     
                 } label: {
                     VStack {
                         HStack(spacing: 16) {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .padding(8)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                            .stroke(Color(.label), lineWidth: 1)
-                                )
+                            
+                            WebImage(url: URL(string: message.profileImageUrl))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipped()
+                                .cornerRadius(50)
+                                .overlay(RoundedRectangle(cornerRadius: 44).stroke(Color.black, lineWidth: 1))
+                                .shadow(radius: 5)
+                            
                             
                             
                             VStack(alignment: .leading) {
-                                Text("Username")
+                                Text(message.username)
                                     .font(.system(size: 16, weight: .bold))
-                                Text("Message sent to user")
+                                Text(message.text)
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(.lightGray))
+                                    .multilineTextAlignment(.leading)
                             }
                             Spacer()
                             
-                            Text("22d")
+                            Text(message.timeAgo)
                                 .font(.system(size: 14, weight: .semibold))
                         }
                         Divider()
@@ -162,6 +169,8 @@ struct MainMessagesView: View {
             CreateNewMessageView { user in
                 self.chatUser = user
                 shouldShowMessageLogView.toggle()
+                self.chatLogViewModel.chatUser = chatUser
+                self.chatLogViewModel.getMessages()
             }
         }
     }
