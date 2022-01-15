@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import CryptoKit
 
 struct FirebaseConstants {
     
@@ -21,6 +22,7 @@ struct ChatMessage: Identifiable {
     
     let documentId: String
     let fromId, toId, text: String
+    var encryptedText: String?
     
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
@@ -39,6 +41,7 @@ class ChatLogViewModel: ObservableObject {
     @Published var count = 0
     
     var chatUser: ChatUser?
+    var encryptedText = ""
     
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
@@ -53,74 +56,166 @@ class ChatLogViewModel: ObservableObject {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else{return}
         guard let toId = chatUser?.uid else {return}
         
-        chatMessages.removeAll()
+        //we always want use our own private key and public key of the reciever
         
-        firestoreListener = FirebaseManager.shared.firestore.collection("messages")
-            .document(fromId)
-            .collection(toId)
-            .order(by: "timestamp")
-            .addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("Error getting messages from firestore \(error.localizedDescription)")
+        guard let privateKey = FirebaseManager.shared.currentUser?.privateKey else{return}
+        var symmetricKey: SymmetricKey?
+        
+        FirebaseManager.shared.firestore.collection("users").document(toId).getDocument{ [self] snapshot, error in
+            
+            if let error = error{
+                print("error getting data from reciever user")
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+            }
+            
+            if let recieverPublicKey = data["publicKey"] as? String {
+                do{
+                    if let publicKey = try Encryption.convertStringToPublicKey(recieverPublicKey) {
+                        symmetricKey = try Encryption.deriveSymmtericKey(privateKey: privateKey, publicKey: publicKey)
+                        
+                        chatMessages.removeAll()
+                        
+                        firestoreListener = FirebaseManager.shared.firestore.collection("messages")
+                            .document(fromId)
+                            .collection(toId)
+                            .order(by: "timestamp")
+                            .addSnapshotListener { querySnapshot, error in
+                                
+                                if let error = error {
+                                    print("Error getting messages from firestore \(error.localizedDescription)")
+                                    return
+                                }
+                                
+                                querySnapshot?.documentChanges.forEach({ change in
+                                    
+                                    var messageData = change.document.data()
+                                    if let symmetricKey = symmetricKey {
+                                        messageData["Text"] = Decrpytion.decryptText(text:messageData["Text"] as? String ?? "", using:symmetricKey)
+                                    }
+                                    else{
+                                        print("get messages -> symmetric key in null")
+                                    }
+                                    
+                                    
+                                    self.chatMessages.append(ChatMessage(documentId: change.document.documentID, data: messageData))
+                                })
+                                
+                            }
+                        
+                        DispatchQueue.main.async {
+                            self.count += 1
+                        }
+                    }
+                    else{
+                        print("couldnt get the public key ->get messages")
+                    }
+                    
+                }
+                catch{
+                    print("error encrypting text")
                     return
                 }
-                
-                querySnapshot?.documentChanges.forEach({ change in
-                    
-                    let data = change.document.data()
-                    self.chatMessages.append(ChatMessage(documentId: change.document.documentID, data: data))
-                })
-                
             }
-        
-        DispatchQueue.main.async {
-            self.count += 1
+            else{
+                print("could not read public key from user data")
+            }
+            
         }
+        
     }
     
     func handleSend() {
         guard let fromId = FirebaseManager.shared.auth.currentUser?.uid else{return}
-        
         guard let toId = chatUser?.uid else {return}
         
-        let document = FirebaseManager.shared.firestore.collection("messages")
-            .document(fromId)
-            .collection(toId)
-            .document()
-        
-        let messageData = ["fromId": fromId, "toId": toId, "Text": chatText, "timestamp": Timestamp()] as [String: Any]
-        
-        document.setData(messageData) { error in
+        guard let senderPrivatekey = FirebaseManager.shared.currentUser?.privateKey else{
+            print("handke send -> couldnt get private key from current user")
+            return
             
-            if let err = error {
-                print(err.localizedDescription)
-                self.errorMessage = "failed to store message to firestore \(err.localizedDescription)"
-                return
-            }
-            
-            self.persistRecentMessage()
-            
-            //no errror
-            print("stored the message to firebase")
-            self.chatText = ""
         }
         
-        let messageReceiverDocument = FirebaseManager.shared.firestore.collection("messages")
-            .document(toId)
-            .collection(fromId)
-            .document()
         
-        messageReceiverDocument.setData(messageData) { error in
+        FirebaseManager.shared.firestore.collection("users").document(toId).getDocument{ [self] snapshot, error in
             
-            if let error = error {
-                print(error)
-                self.errorMessage = "failed to store message to firestore \(error)"
+            if let error = error{
+                print("error getting data from reciever user")
+                print(error.localizedDescription)
                 return
             }
             
-            //saved message successfully
+            guard let data = snapshot?.data() else {
+                self.errorMessage = "No data found"
+                return
+            }
             
-            print("successfully stored receiver message")
+            if let recieverPublicKey = data["publicKey"] as? String {
+                do{
+                    if let publicKey = try Encryption.convertStringToPublicKey(recieverPublicKey){
+                        let symmetricKey = try Encryption.deriveSymmtericKey(privateKey: senderPrivatekey, publicKey: publicKey)
+                        self.encryptedText = try Encryption.encryptText(text: self.chatText, using: symmetricKey)
+                        
+                        let document = FirebaseManager.shared.firestore.collection("messages")
+                            .document(fromId)
+                            .collection(toId)
+                            .document()
+                        
+                        let messageData = ["fromId": fromId, "toId": toId, "Text": self.encryptedText, "timestamp": Timestamp()] as [String: Any]
+                        
+                        document.setData(messageData) { error in
+                            
+                            if let err = error {
+                                print(err.localizedDescription)
+                                self.errorMessage = "failed to store message to firestore \(err.localizedDescription)"
+                                return
+                            }
+                            
+                            self.persistRecentMessage()
+                            
+                            //no errror
+                            print("stored the message to firebase")
+                            self.chatText = ""
+                        }
+                        
+                        let messageReceiverDocument = FirebaseManager.shared.firestore.collection("messages")
+                            .document(toId)
+                            .collection(fromId)
+                            .document()
+                        
+                        messageReceiverDocument.setData(messageData) { error in
+                            
+                            if let error = error {
+                                print(error)
+                                self.errorMessage = "failed to store message to firestore \(error)"
+                                return
+                            }
+                            
+                            //saved message successfully
+                            
+                            print("successfully stored receiver message")
+                            
+                        }
+                    }
+                    else{
+                        print("Couldnt get public key from users data in firestore - handle send")
+                    }
+                    
+                }
+                catch{
+                    print("error encrypting text")
+                    return
+                }
+                
+            }
+            
+            else{
+                print("Handle send -> could not get public key from reciever")
+            }
             
         }
         
@@ -136,7 +231,7 @@ class ChatLogViewModel: ObservableObject {
         
         let data = [
             "timestamp" : Timestamp(),
-            "Text": self.chatText,
+            "Text": self.encryptedText,
             "fromId": uid,
             "toId" : toId,
             "profileImageUrl": self.chatUser?.imageProfile as Any,
@@ -160,7 +255,7 @@ class ChatLogViewModel: ObservableObject {
         
         let recipientData =  [
             "timestamp" : Timestamp(),
-            "Text": self.chatText,
+            "Text": self.encryptedText,
             "fromId": uid,
             "toId" : toId,
             "profileImageUrl": currentUser.imageProfile as Any,

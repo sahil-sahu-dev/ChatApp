@@ -175,6 +175,7 @@ struct LoginView: View {
     
     private func storeUserInformation(imageProfileUrl: URL) {
         guard let uid = FirebaseManager.shared.auth.currentUser?.uid else { return }
+        
         let userData = ["email": self.email, "uid": uid, "profileImageUrl": imageProfileUrl.absoluteString]
         FirebaseManager.shared.firestore.collection("users")
             .document(uid).setData(userData) { err in

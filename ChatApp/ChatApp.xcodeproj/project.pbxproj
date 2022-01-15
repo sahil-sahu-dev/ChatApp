@@ -11,6 +11,8 @@
 		B2027ABB274F030F00CDBA26 /* ChatUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2027ABA274F030F00CDBA26 /* ChatUser.swift */; };
 		B236177627910B0100C836D3 /* RecentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B236177527910B0100C836D3 /* RecentMessage.swift */; };
 		B23D415E2750DB9C00E3756B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B23D415D2750DB9C00E3756B /* SDWebImageSwiftUI */; };
+		B23DA4222792847500CC7982 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = B23DA4212792847500CC7982 /* KeychainAccess */; };
+		B23DA4242792999D00CC7982 /* Decryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23DA4232792999D00CC7982 /* Decryption.swift */; };
 		B24511172759146B007F6861 /* ChatLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24511162759146B007F6861 /* ChatLogView.swift */; };
 		B246629C2759ED9800B8A1FA /* ChatLogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */; };
 		B24C38C427904A28006DA0E9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B24C38C327904A28006DA0E9 /* GoogleService-Info.plist */; };
@@ -24,6 +26,8 @@
 		B2A8629A273FD4870040DFE9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A86299273FD4870040DFE9 /* LoginView.swift */; };
 		B2A8629C273FD4890040DFE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2A8629B273FD4890040DFE9 /* Assets.xcassets */; };
 		B2A8629F273FD4890040DFE9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2A8629E273FD4890040DFE9 /* Preview Assets.xcassets */; };
+		B2BBBC0E27913ECB0067B130 /* Encryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BBBC0D27913ECB0067B130 /* Encryption.swift */; };
+		B2BBBC102791C27F0067B130 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BBBC0F2791C27F0067B130 /* GenericPasswordConvertible.swift */; };
 		B2D496502743AC6700915420 /* MainMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D4964F2743AC6700915420 /* MainMessagesView.swift */; };
 		B2D75EC3273FEC71002933C3 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D75EC2273FEC71002933C3 /* FirebaseManager.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +36,7 @@
 		B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesViewDocument.swift; sourceTree = "<group>"; };
 		B2027ABA274F030F00CDBA26 /* ChatUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUser.swift; sourceTree = "<group>"; };
 		B236177527910B0100C836D3 /* RecentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentMessage.swift; sourceTree = "<group>"; };
+		B23DA4232792999D00CC7982 /* Decryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decryption.swift; sourceTree = "<group>"; };
 		B24511162759146B007F6861 /* ChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogView.swift; sourceTree = "<group>"; };
 		B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogViewModel.swift; sourceTree = "<group>"; };
 		B24C38C327904A28006DA0E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -43,6 +48,8 @@
 		B2A86299273FD4870040DFE9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B2A8629B273FD4890040DFE9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2A8629E273FD4890040DFE9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B2BBBC0D27913ECB0067B130 /* Encryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryption.swift; sourceTree = "<group>"; };
+		B2BBBC0F2791C27F0067B130 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		B2D4964F2743AC6700915420 /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
 		B2D75EC2273FEC71002933C3 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -56,6 +63,7 @@
 				B2A0180E274137F200C2E4BE /* FirebaseAuth in Frameworks */,
 				B2A01810274137F200C2E4BE /* FirebaseFirestore in Frameworks */,
 				B2A01812274137F200C2E4BE /* FirebaseStorage in Frameworks */,
+				B23DA4222792847500CC7982 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,11 +91,14 @@
 			children = (
 				B2A86297273FD4870040DFE9 /* ChatAppApp.swift */,
 				B2A86299273FD4870040DFE9 /* LoginView.swift */,
+				B2BBBC0D27913ECB0067B130 /* Encryption.swift */,
 				B2D4964F2743AC6700915420 /* MainMessagesView.swift */,
 				B236177527910B0100C836D3 /* RecentMessage.swift */,
 				B24511162759146B007F6861 /* ChatLogView.swift */,
 				B246629B2759ED9800B8A1FA /* ChatLogViewModel.swift */,
+				B23DA4232792999D00CC7982 /* Decryption.swift */,
 				B2027AB8274F02B400CDBA26 /* MainMessagesViewDocument.swift */,
+				B2BBBC0F2791C27F0067B130 /* GenericPasswordConvertible.swift */,
 				B25FD3212754D4A600E5F3DB /* CreateNewMessageView.swift */,
 				B25FD3232754D5E300E5F3DB /* CreateNewMessageViewModel.swift */,
 				B2027ABA274F030F00CDBA26 /* ChatUser.swift */,
@@ -129,6 +140,7 @@
 				B2A0180F274137F200C2E4BE /* FirebaseFirestore */,
 				B2A01811274137F200C2E4BE /* FirebaseStorage */,
 				B23D415D2750DB9C00E3756B /* SDWebImageSwiftUI */,
+				B23DA4212792847500CC7982 /* KeychainAccess */,
 			);
 			productName = ChatApp;
 			productReference = B2A86294273FD4870040DFE9 /* ChatApp.app */;
@@ -161,6 +173,7 @@
 			packageReferences = (
 				B2A0180C274137F200C2E4BE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B23D415C2750DB9B00E3756B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				B23DA4202792847400CC7982 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = B2A86295273FD4870040DFE9 /* Products */;
 			projectDirPath = "";
@@ -192,7 +205,9 @@
 				B2027ABB274F030F00CDBA26 /* ChatUser.swift in Sources */,
 				B24511172759146B007F6861 /* ChatLogView.swift in Sources */,
 				B2027AB9274F02B400CDBA26 /* MainMessagesViewDocument.swift in Sources */,
+				B2BBBC0E27913ECB0067B130 /* Encryption.swift in Sources */,
 				B246629C2759ED9800B8A1FA /* ChatLogViewModel.swift in Sources */,
+				B23DA4242792999D00CC7982 /* Decryption.swift in Sources */,
 				B2D75EC3273FEC71002933C3 /* FirebaseManager.swift in Sources */,
 				B25FD3222754D4A600E5F3DB /* CreateNewMessageView.swift in Sources */,
 				B2A0180B274129A500C2E4BE /* ImagePicker.swift in Sources */,
@@ -200,6 +215,7 @@
 				B236177627910B0100C836D3 /* RecentMessage.swift in Sources */,
 				B2A86298273FD4870040DFE9 /* ChatAppApp.swift in Sources */,
 				B25FD3242754D5E300E5F3DB /* CreateNewMessageViewModel.swift in Sources */,
+				B2BBBC102791C27F0067B130 /* GenericPasswordConvertible.swift in Sources */,
 				B2D496502743AC6700915420 /* MainMessagesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,6 +429,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		B23DA4202792847400CC7982 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		B2A0180C274137F200C2E4BE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -428,6 +452,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B23D415C2750DB9B00E3756B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		B23DA4212792847500CC7982 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B23DA4202792847400CC7982 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 		B2A0180D274137F200C2E4BE /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;

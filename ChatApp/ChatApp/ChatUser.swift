@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import CryptoKit
 
 struct ChatUser:Identifiable {
     
@@ -14,7 +14,8 @@ struct ChatUser:Identifiable {
     let uid: String
     let imageProfile: String
     let email: String
-    
-    
-    
+    var privateKey: P256.KeyAgreement.PrivateKey?
+    var publicKey: String? {
+        Encryption.exportPublicKey(privateKey?.publicKey) 
+    }
 }
