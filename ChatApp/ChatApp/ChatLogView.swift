@@ -71,9 +71,7 @@ struct ChatLogView: View {
     
     private var chatBottomBar: some View {
         HStack(spacing: 16) {
-            Image(systemName: "photo.on.rectangle")
-                .font(.system(size: 24))
-                .foregroundColor(Color(.darkGray))
+            
             ZStack {
                 DescriptionPlaceholder()
                 TextEditor(text: $vm.chatText)

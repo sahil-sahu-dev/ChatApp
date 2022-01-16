@@ -67,8 +67,10 @@ struct MainMessagesView: View {
             LoginView{
                 //logging in for the first time
                 self.vm.isUserCurrentlyLoggedOut = false
-                self.vm.fetchCurrentUser()
-                self.vm.fetchRecentMessages()
+                self.vm.fetchCurrentUser{
+                    self.vm.fetchRecentMessages()
+                }
+                
             }
         }
     }
@@ -87,6 +89,12 @@ struct MainMessagesView: View {
                     ChatLogView(vm:chatLogViewModel)
                 }
             }
+            .fullScreenCover(isPresented: $vm.userSignedInOnAnotherDevice) {
+                VStack{
+                    Text("It looks like this account is already signed-in on another device. Please log out there to sign in here.").padding()
+                }
+            }
+            
             .overlay(
                 newMessageButton, alignment: .bottom)
             .navigationBarHidden(true)
