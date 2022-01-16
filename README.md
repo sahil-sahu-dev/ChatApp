@@ -1,4 +1,9 @@
 # ChatApp
+## Features 💡 
+* Send and recieve text messages
+* View time elapsed since recent message
+* End to end encryption
+## Technologies used  💻
 * End to end encryption using public key cryptography(P256).
 * Used Keychain to store private keys locally on the device.
 * Firebase, Firestore
